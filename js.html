@@ -1,0 +1,133 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script>
+
+google.script.run.withSuccessHandler(initializeVue).getSpreadsheetNameAndPersonalNames();
+
+var vm;
+
+function initializeVue(values){
+  vm = new Vue({
+    el: '#app',
+    data: {
+      message: 'バインドしているシートは ' + values.selectedSheetName + ' です。',
+      names: values.names,
+      lunches: values.lunches,
+      //absences: values.absences,
+      sheetNames: values.sheetNames,
+      selectedSheet: values.selectedSheetName,
+      stays: values.stays,
+      attendances: {},
+      ddlData: values.attendances,
+
+      show: 'show', //起動時のデータ読み込み中に余計なものを表示させない
+      flag: false //ボタンやトグルを連打できないようにする
+    },
+    methods: {
+      //来客帰宅ボタンが押されたらスプレッドシートに時刻を書き込む
+      setDate: function (name, rk) {
+        if (!this.flag) {
+        
+          if (rk == '来客') {
+            if (this.stays[name] != 0) return;
+            this.stays[name] = 1;
+          }
+          else if (rk == '帰宅') {
+            if (this.stays[name] != 1) return;
+            this.stays[name] = 2;
+          }
+
+          this.flag = true;
+          //this.absences[name] = false;
+          this.attendances[name] = '出席';
+          this.ddlData[name] = '出席';
+
+          this.message = name + 'さんが' + getTime_js_(rk) + 'に' + rk + 'しました。';
+          //google.script.run.withSuccessHandler(showDate).show_date(name, rk);
+
+          google.script.run.withSuccessHandler(wait).set_date(this.names, name, rk, this.attendances);
+        }
+      },
+
+      //昼食トグルが押されたら食事データを切り替える
+      setLunch: function (name) {
+        if (!this.flag) {
+          this.flag = true;
+          this.lunches[name] = !this.lunches[name];
+          google.script.run.withSuccessHandler(wait).set_lunch(this.names, name, this.lunches);
+        }
+      },
+
+      //休みトグルが押されたら出席データを切り替える
+      /*setAbsence: function (name) {
+        if (!this.flag) {
+          this.flag = true;
+          this.absences[name] = !this.absences[name];
+          google.script.run.withSuccessHandler(wait).set_absence(this.names, name, this.absences);
+        }
+      },*/
+
+      setAttendance: function (name) {
+        if (!this.flag) {
+          this.flag = true;
+          this.attendances[name] = this.ddlData[name];
+
+          if (this.attendances[name] != '出席') this.stays[name] = 0;
+
+          google.script.run.withSuccessHandler(wait).set_attendance(this.names, name, this.attendances);
+        }
+        else this.ddlData[name] = this.attendances[name];
+      }
+      
+      /*,
+      changeSheet: function () {
+        google.script.run.withSuccessHandler(showSheetName).change_sheet(this.selectedSheet);
+      }*/
+    }
+  });
+
+  for (let i = 0; i < vm.names.length; i++) vm.attendances[vm.names[i]] = vm.ddlData[vm.names[i]];
+}
+
+//来客帰宅ボタンが押されたらwebに表示する
+/*function showDate(values) {
+  vm.message = values.name + 'さんが' + values.time + 'に' + values.rk + 'しました';
+}*/
+
+/*function showSheetName(values) {
+  vm.lunches = values.lunches;
+  vm.absences = values.absences;
+  vm.message = 'バインドしているシートは ' + vm.selectedSheet + ' です。';
+}*/
+
+
+
+//ボタンやトグルが押された後、スプレッドシートへの書き込みが終わってから呼び出される
+function wait() {
+  vm.flag = false;
+}
+
+
+function getTime_js_(rk) {
+  let now = new Date();
+  let hour = now.getHours();
+  let minute = 0; //now.getMinutes();
+
+  if (rk == '来客') {
+    if      ( 8 <= hour && hour <  12) hour = 10;
+    else if (12 <= hour && hour <= 15) hour = 13;
+  }
+  else if (rk == '帰宅') {
+    if      ( 9 <= hour && hour <  13) hour = 12;
+    else if (13 <= hour && hour <= 16) hour = 15;
+  }
+  
+  if (minute == 0) minute = '00';
+
+  let time = hour + ":" + minute;
+
+  return time;
+}
+
+
+</script>
+

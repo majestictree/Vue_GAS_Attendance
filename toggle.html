@@ -1,0 +1,112 @@
+<style type="text/css">
+
+.toggle-off-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.toggle-off-label {
+  width: 40px;
+  height: 20px;
+  background: #ccc;
+  position: relative;
+  display: inline-block;
+  border-radius: 46px;
+  transition: 0.4s;
+  box-sizing: border-box;
+}
+.toggle-off-label:after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: 0.4s;
+}
+
+/*.toggle-off-input:checked + .toggle-off-label {
+  background-color: #4BD865;
+}
+.toggle-off-input:checked + .toggle-off-label:after {
+  left: 20px;
+}*/
+
+.toggle-off-switch {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  margin: auto;
+}
+
+
+
+.toggle-on-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.toggle-on-label {
+  width: 40px;
+  height: 20px;
+  background: #4BD865;
+  position: relative;
+  display: inline-block;
+  border-radius: 46px;
+  transition: 0.4s;
+  box-sizing: border-box;
+}
+.toggle-on-label:after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  left: 20px;
+  top: 0;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: 0.4s;
+}
+
+/*.toggle-on-input:checked + .toggle-on-label {
+  background-color: #ccc;
+}
+.toggle-on-input:checked + .toggle-on-label:after {
+  left: 0px;
+}*/
+
+.toggle-on-switch {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  margin: auto;
+}
+
+
+
+#toggle.toggle-on-input {
+    margin: 0;
+}
+#toggle.toggle-off-input {
+    margin: 0;
+}
+
+</style>

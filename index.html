@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style type="text/css">
+      table {
+        border-collapse: collapse;
+        position: relative;
+        top: 50px
+      }
+
+      td {
+        padding: 8px;
+      }
+      td.lunch {
+        padding: 8px 0px 8px 8px;
+      }
+      td {
+        border: 1px dashed #000;
+      }
+      tr, td.nm {
+        border: 1px solid #000;
+      }
+      td.center {
+        text-align: center;
+      }
+
+      .stay {
+        background-color: #9f9;
+      }
+      .home {
+        background-color: #ccf;
+      }
+
+      .hide {
+        display: none;
+      }
+      .show {
+        display: block;
+      }
+
+      .info {
+        padding: 10px;
+        margin: 0;
+        background-color: #bfb;
+        position: fixed;
+        z-index: 8;
+        width: 100%;
+        left: 0;
+        top: 0;
+      }
+      .writing-show {
+        padding: 10px;
+        margin: 20px;
+        background-color: #bfb;
+        border-radius: 10px;
+        position: fixed;
+        z-index: 9;
+        right: 0;
+        bottom: 0;
+        transition: 0.2s;
+      }
+      .writing-hide {
+        padding: 10px;
+        margin: 20px;
+        background-color: #bfb;
+        border-radius: 10px;
+        position: fixed;
+        z-index: 9;
+        right: 0;
+        bottom: 0;
+        transition: 0.3s;
+        opacity: 0;
+      }
+    </style>
+    <?!= HtmlService.createHtmlOutputFromFile('toggle').getContent(); ?>
+  </head>
+  <body>
+    <div id="app">
+      <p class="info" v-if="false">データ読み込み中です...</p>
+
+      <p class="hide info" v-bind:class="show">{{message}}</p>
+      <table class="hide" v-bind:class="show">
+
+        <tr>
+          <td class="nm center">氏名</td>
+          <td class="center">利用時間</td>
+          <td class="center">食事</td>
+          <td class="center">出席</td>
+        </tr>
+
+        <tr v-for="name in names">
+
+          <td v-if     ="stays[name] == 0" class="nm"     >{{name}}</td>
+          <td v-else-if="stays[name] == 1" class="nm stay">{{name}}</td>
+          <td v-else                       class="nm home">{{name}}</td>
+
+          <td><button v-on:click="setDate(name,'来客')">来客</button><button v-on:click="setDate(name,'帰宅')">帰宅</button></td>
+          
+
+          <!--<td class="lunch">食事</td>-->
+
+          <td v-if="lunches[name]">
+            <div class="toggle-on-switch" v-on:click="setLunch(name)">
+              <input id="toggle" class="toggle-on-input" type='checkbox' />
+              <label for="toggle" class="toggle-on-label" />
+            </div>
+          </td>
+
+          <td v-else>
+            <div class="toggle-off-switch" v-on:click="setLunch(name)">
+              <input id="toggle" class="toggle-off-input" type='checkbox' />
+              <label for="toggle" class="toggle-off-label" />
+            </div>
+          </td>
+
+
+          <!--<td class="lunch">出欠</td>-->
+
+          <!--
+          <td v-if="absences[name]">
+            <div class="toggle-on-switch" v-on:click="setAbsence(name)">
+              <input id="toggle" class="toggle-on-input" type='checkbox' />
+              <label for="toggle" class="toggle-on-label" />
+            </div>
+          </td>
+
+          <td v-else>
+            <div class="toggle-off-switch" v-on:click="setAbsence(name)">
+              <input id="toggle" class="toggle-off-input" type='checkbox' />
+              <label for="toggle" class="toggle-off-label" />
+            </div>
+          </td>
+          -->
+
+          <td>
+            <select v-model="ddlData[name]" v-on:change="setAttendance(name)">
+              <option>出席</option>
+              <option>当欠</option>
+              <option>欠（加）</option>
+              <option>公休</option>
+              <option>休み</option>
+            </select>
+          </td>
+
+        </tr>
+      </table>
+
+      
+      
+
+      <p class="hide writing-show" v-bind:class="show" v-if="flag">シート書き込み中...</p>
+      <p class="hide writing-hide" v-bind:class="show" v-else     >シート書き込み中...</p>
+      
+
+    </div>
+    <?!= HtmlService.createHtmlOutputFromFile('js').getContent(); ?>
+  </body>
+</html>
+
+
