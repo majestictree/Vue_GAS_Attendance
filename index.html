@@ -114,25 +114,6 @@
             </div>
           </td>
 
-
-          <!--<td class="lunch">出欠</td>-->
-
-          <!--
-          <td v-if="absences[name]">
-            <div class="toggle-on-switch" v-on:click="setAbsence(name)">
-              <input id="toggle" class="toggle-on-input" type='checkbox' />
-              <label for="toggle" class="toggle-on-label" />
-            </div>
-          </td>
-
-          <td v-else>
-            <div class="toggle-off-switch" v-on:click="setAbsence(name)">
-              <input id="toggle" class="toggle-off-input" type='checkbox' />
-              <label for="toggle" class="toggle-off-label" />
-            </div>
-          </td>
-          -->
-
           <td>
             <select v-model="ddlData[name]" v-on:change="setAttendance(name)">
               <option>出席</option>

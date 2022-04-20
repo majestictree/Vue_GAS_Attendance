@@ -23,7 +23,6 @@ function getSpreadsheetNameAndPersonalNames() {
     selectedSheetName: sheet.getSheetName(),
     names: ns,
     lunches: getLunches(ns, sheet),
-    //absences: getAbsences(ns),
     attendances: getAttendances(ns, sheet),
     stays: getStays(ns, sheet)
   };
@@ -51,12 +50,6 @@ function getPersonalNames() {
     else break;
   }
 
-  /*for (let row = 4;; row++) {
-    value = sheet.getRange(row,2).getValue();
-    if (value != "") names.push(value);
-    else break;
-  }*/
-
   return names;
 }
 
@@ -74,32 +67,8 @@ function getLunches(names, sheet) {
     else                     lunches[ names[i] ] = false;
   }
 
-  /*for (let row = firstRow; row - firstRow < names.length; row++) {
-    value = sheet.getRange(row,col).getValue();
-    if (value == '1') lunches[ names[row - firstRow] ] = true;
-    else              lunches[ names[row - firstRow] ] = false;
-  }*/
-
   return lunches;
 }
-
-//シートから休み情報取得しオブジェクト型で返す
-/*function getAbsences(names) {
-  let sheet = getTodaySheet();
-
-  let absences = {};
-  let value;
-
-  let col = 5; //出席の列
-
-  for (let row = firstRow; row - firstRow < names.length; row++) {
-    value = sheet.getRange(row,col).getValue();
-    if (value == '欠（加）') absences[ names[row - firstRow] ] = true;
-    else                    absences[ names[row - firstRow] ] = false;
-  }
-
-  return absences;
-}*/
 
 function getAttendances(names, sheet) {
   let attendances = {};
@@ -112,12 +81,6 @@ function getAttendances(names, sheet) {
   for (let i = 0; i < names.length; i++) {
     attendances[ names[i] ] = values[i][0];
   }
-
-  /*for (let row = firstRow; row - firstRow < names.length; row++) {
-    value = sheet.getRange(row,col).getValue();
-
-    attendances[ names[row - firstRow] ] = value;
-  }*/
 
   return attendances;
 }
@@ -136,26 +99,8 @@ function getStays(names, sheet) {
     else                                                     stays[ names[i] ] = 0;
   }
 
-  /*for (let row = firstRow; row - firstRow < names.length; row++) {
-
-    rai = sheet.getRange(row,raiCol).getValue();
-    kit = sheet.getRange(row,kitCol).getValue();
-
-    if (rai != '' && kit == '') stays[ names[row - firstRow] ] = true;
-    else                        stays[ names[row - firstRow] ] = false;
-  }*/
-
   return stays;
 }
-
-/*function getSheetNames() {
-  let sheets = ss.getSheets();
-  let sn = [];
-  for (let i = 1; i < sheets.length; i++) {
-    sn.push(sheets[i].getSheetName());
-  }
-  return sn;
-}*/
 
 //時刻の書き込み
 function set_date(names, name, rk, attendances) {
@@ -176,16 +121,6 @@ function set_date(names, name, rk, attendances) {
   set_attendance(names,name,attendances);
 }
 
-//web表示用データ
-/*function show_date(name, rk) {
-  let values = {
-    name: name,
-    time: getTime_(rk),
-    rk: rk
-  };
-  return values;
-}*/
-
 //食事の切り替え
 function set_lunch(names, name, lunches) {
   let sheet = getTodaySheet();
@@ -201,33 +136,7 @@ function set_lunch(names, name, lunches) {
   else {
     sheet.getRange(row, col).setValue('');
   }
-  
-  /*for (let i = 0; i < names.length; i++) {
-    if (lunches[names[i]]) {
-      sheet.getRange(i+firstRow, col).setValue('1');
-    }
-    else {
-      sheet.getRange(i+firstRow, col).setValue('');
-    }
-  }*/
 }
-
-//出席、欠席の切り替え
-/*function set_absence(names, name, absences) {
-  let sheet = getTodaySheet();
-  let index = names.indexOf(name);
-
-  let col = 5; //出席の列
-
-  let row = index + firstRow;
-
-  if (absences[name]) {
-    sheet.getRange(index+firstRow, col).setValue('欠（加）');
-  }
-  else {
-    sheet.getRange(index+firstRow, col).setValue('出席');
-  }
-}*/
 
 //出欠の切り替え
 function set_attendance(names, name, attendances) {
@@ -244,21 +153,6 @@ function set_attendance(names, name, attendances) {
     sheet.getRange(row,kitCol).setValue('');
   }
 }
-
-/*function change_sheet(sheetName) {
-  let nameListSheet = ss.getSheetByName('名前リスト');
-  let cell = nameListSheet.getRange(1,3);
-
-  cell.setValue(sheetName);
-
-  let values = {
-    lunches: getLunches(getPersonalNames()),
-    absences: getAbsences(getPersonalNames())
-  };
-
-  return values;
-}*/
-
 
 function t_(rk) {
   let now = new Date();
@@ -304,12 +198,3 @@ function getTime_(rk) {
 
   return time;
 }
-
-
-
-
-
-
-
-
-
